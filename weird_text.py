@@ -90,25 +90,28 @@ def decode(text, sorted_words_list):
             same_size_list = [s for s in middle_sorted_words_list if len(s) == len(word_middle)]
             # this variable will save our decoded word
             wanted_word = ""
-            # do until word not with same letters and word not found yet
-            while not ''.join(word_middle) == len(word_middle) * word_middle[0] and not word_found:
-                for s in same_size_list:
-                    count_good = 0
-                    wanted_word = ""
-                    # for every char in middle word key
-                    for c in s:
-                        # for every char in encoded word
-                        for x in word_middle:
-                            if x == c:
-                                count_good += 1
-                                # creating word if chars the same
-                                wanted_word += c
-                                # no need to iterate more if found
-                                break
-                    # if word length matches, no need to iterate more - word found
-                    if count_good == len(word_middle):
-                        word_found = True
-                        break
+            # check if the same letters
+            if ''.join(word_middle) == len(word_middle) * word_middle[0]:
+                wanted_word = "".join(word_middle)
+            else:
+                while not word_found:
+                    for s in same_size_list:
+                        count_good = 0
+                        wanted_word = ""
+                        # for every char in middle word key
+                        for c in s:
+                            # for every char in encoded word
+                            for x in word_middle:
+                                if x == c:
+                                    count_good += 1
+                                    # creating word if chars the same
+                                    wanted_word += c
+                                    # no need to iterate more if found
+                                    break
+                        # if word length matches, no need to iterate more - word found
+                        if count_good == len(word_middle):
+                            word_found = True
+                            break
             # put decoded word together
             decoded_word_temp = prefix + wanted_word + suffix
             decoded_sentence_word_list.append(decoded_word_temp)
@@ -131,7 +134,10 @@ sentence2 = 'A black hole is a region of spacetime exhibiting such strong gravit
             'to its mass. This temperature is on the order of billionths of a kelvin for ' \
             'black holes of stellar mass, making it essentially impossible to observe.'
 
+encoded_sentence, sorted_words_list = encode(sentence)
+print(encoded_sentence)
+print(decode(encoded_sentence, sorted_words_list))
+
 encoded_sentence, sorted_words_list = encode(sentence2)
 print(encoded_sentence)
-print(" ".join(sorted_words_list))
 print(decode(encoded_sentence, sorted_words_list))
