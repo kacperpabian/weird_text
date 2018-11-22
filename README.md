@@ -1,4 +1,11 @@
 <h2>Weird Text</h2><br>
+<h3>How to run it</h3>
+<p>You can run it with docker: </p>
+<p>docker build -t python-werid .</p>
+<p>docker run python-weird</p>
+<p>Or with pipenv:</p>
+<p>pipenv install</p>
+<p>pipenv run weird_text.py</p>
 Task:<br>
 <h3>WeirdText encoding and decoding</h3>
 WeirdText is a text encoding.<br>
