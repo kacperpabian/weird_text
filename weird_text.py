@@ -19,20 +19,11 @@ def encode(text):
             curr_char = ""
             counter_prefix = 0
             # this loop handles prefix for out word, starts from left, ends when finds first numeric char
-            while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
-                curr_char = listed_chars[counter_prefix]
-                prefix += curr_char
-                counter_prefix += 1
+            counter_prefix, prefix = get_prefix(counter_prefix, curr_char, listed_chars, prefix)
             suffix = ""
             curr_char = ""
             counter_suffix = len(listed_chars) - 1
-            # this loop handles suffix for out word, starts from right, ends when finds first numeric char
-            while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
-                curr_char = listed_chars[counter_suffix]
-                suffix += curr_char
-                counter_suffix -= 1
-            # reverse suffix
-            suffix = suffix[::-1]
+            counter_suffix, suffix = get_suffix(counter_suffix, curr_char, listed_chars, suffix)
             # taking the middle of word to shuffle it. Using prefix and suffix indexes
             word_middle = [let for i, let in enumerate(listed_chars) if counter_prefix <= i <= counter_suffix]
             shuffled_word = copy(word_middle)
@@ -72,18 +63,11 @@ def decode(text, sorted_words_list):
             prefix = ""
             curr_char = ""
             counter_prefix = 0
-            while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
-                curr_char = listed_chars[counter_prefix]
-                prefix += curr_char
-                counter_prefix += 1
+            counter_prefix, prefix = get_prefix(counter_prefix, curr_char, listed_chars, prefix)
             suffix = ""
             curr_char = ""
             counter_suffix = len(listed_chars) - 1
-            while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
-                curr_char = listed_chars[counter_suffix]
-                suffix += curr_char
-                counter_suffix -= 1
-            suffix = suffix[::-1]
+            counter_suffix, suffix = get_suffix(counter_suffix, curr_char, listed_chars, suffix)
             word_middle = [let for i, let in enumerate(listed_chars) if counter_prefix <= i <= counter_suffix]
             word_found = False
             # crating list with only key words the same size as encoded word
@@ -117,6 +101,26 @@ def decode(text, sorted_words_list):
             decoded_sentence_word_list.append(decoded_word_temp)
 
     return " ".join(decoded_sentence_word_list)
+
+
+def get_suffix(counter_suffix, curr_char, listed_chars, suffix):
+    # this function handles suffix for out word, starts from right, ends when finds first numeric char
+    while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
+        curr_char = listed_chars[counter_suffix]
+        suffix += curr_char
+        counter_suffix -= 1
+    # reversing chars
+    suffix = suffix[::-1]
+    return counter_suffix, suffix
+
+
+def get_prefix(counter_prefix, curr_char, listed_chars, prefix):
+    """this function handles prefix for out word, starts from left, ends when finds first numeric char"""
+    while not re.match("^[a-zA-Z0-9_]*$", curr_char) or curr_char == "":
+        curr_char = listed_chars[counter_prefix]
+        prefix += curr_char
+        counter_prefix += 1
+    return counter_prefix, prefix
 
 
 sentence = 'This is a long looong test sentence,\n' \
